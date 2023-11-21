@@ -9,18 +9,20 @@ private:
   int start;
   int end;
   T* data;
-  
+
 public:
   TQueue(int _size = 1);
-  TQueue(const TQueue &p);
+  TQueue(const TQueue& p);
   ~TQueue();
-  
-  void push(T &a);
+
+  void push(T& a);
   T pull();
-  
+
   int getCount();
+  int getStart();
+  int getEnd();
   int getSize();
-  
+
   bool isFull();
   bool isEmpty();
 };
@@ -44,7 +46,7 @@ TQueue<T>::TQueue(int _size)
 template <class T>
 TQueue<T>::TQueue(const TQueue& p)
 {
-  if (p.size < 0) 
+  if (p.size < 0)
     throw "size error";
 
   size = p.size;
@@ -68,8 +70,12 @@ TQueue<T>::~TQueue()
 template <class T>
 void TQueue<T>::push(T& a)
 {
-  if (end > size)
+  if (isFull())
     throw "size error";
+
+  if (end >= size)
+    if (start > 0)
+      end = 0;
 
   data[end] = a;
   end++;
@@ -81,7 +87,22 @@ T TQueue<T>::pull()
   if (start < 0)
     throw "size error";
 
+  if (isEmpty())
+    throw "size error";
+
   T a;
+
+  if (start > size)
+  {
+    if (end > 0)
+    {
+      a = data[0];
+      start = 0;
+    }
+    else
+      throw "size error";
+  }
+
   a = data[start];
   start++;
 
@@ -91,7 +112,22 @@ T TQueue<T>::pull()
 template <class T>
 int TQueue<T>::getCount()
 {
-  return end - start;
+  int res = end - start;
+  if (end < start)
+    res = size - start + end;
+  return res;
+}
+
+template <class T>
+int TQueue<T>::getStart()
+{
+  return start;
+}
+
+template <class T>
+int TQueue<T>::getEnd()
+{
+  return end;
 }
 
 template <class T>
@@ -103,13 +139,12 @@ int TQueue<T>::getSize()
 template <class T>
 bool TQueue<T>::isFull()
 {
-  if (end > size)
-    throw "size error";
-
   int res = false;
-  if (end == size)
+  int count = getCount();
+
+  if (count == size)
     res = true;
-  
+
   return res;
 }
 
@@ -122,6 +157,6 @@ bool TQueue<T>::isEmpty()
   int res = false;
   if (start == end)
     res = true;
-  
+
   return res;
 }

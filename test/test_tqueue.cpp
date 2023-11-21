@@ -25,10 +25,21 @@ TEST(TQueue, can_get_size)
 
 TEST(TQueue, can_push_and_get_count)
 {
-  TQueue<int> q(5);
+  TQueue<int> q(2);
   int num = 1;
   q.push(num);
   EXPECT_EQ(1, q.getCount());
+}
+
+TEST(TQueue, ring_push)
+{
+  TQueue<int> q(2);
+  int num = 1;
+  q.push(num);
+  q.push(num);
+  q.pull();
+  q.push(num);
+  EXPECT_EQ(1, q.getEnd());
 }
 
 TEST(TQueue, can_pull_and_get_count)
@@ -38,6 +49,16 @@ TEST(TQueue, can_pull_and_get_count)
   q.push(num);
   q.pull();
   EXPECT_EQ(0, q.getCount());
+}
+
+TEST(TQueue, ring_pull)
+{
+  TQueue<int> q(2);
+  int num = 1;
+  q.push(num);
+  q.push(num);
+  q.pull();
+  EXPECT_EQ(1, q.getStart());
 }
 
 TEST(TQueue, checks_if_full)
