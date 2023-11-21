@@ -20,8 +20,6 @@ public:
   
   int getCount();
   int getSize();
-  int getStart();
-  int getEnd();
   
   bool isFull();
   bool isEmpty();
@@ -103,26 +101,14 @@ int TQueue<T>::getSize()
 }
 
 template <class T>
-int TQueue<T>::getStart()
-{
-  return start;
-}
-
-template <class T>
-int TQueue<T>::getEnd()
-{
-  return end;
-}
-
-template <class T>
 bool TQueue<T>::isFull()
 {
   if (end > size)
     throw "size error";
 
-  int res = 0;
+  int res = false;
   if (end == size)
-    res = 1;
+    res = true;
   
   return res;
 }
@@ -133,9 +119,9 @@ bool TQueue<T>::isEmpty()
   if (start < 0)
     throw "size error";
 
-  int res = 0;
+  int res = false;
   if (start == end)
-    res = 1;
+    res = true;
   
   return res;
 }
